@@ -7,7 +7,7 @@
 - [x] Bootloader
 - [x] Boot
 - [x] Protected Mode
-- [ ] Basic kernel
+- [x] Basic kernel
 
 ### GDT & IDT
 - [ ] [GDT](https://wiki.osdev.org/GDT_Tutorial)

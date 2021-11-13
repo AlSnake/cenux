@@ -12,3 +12,5 @@ cenux.qt.*
 *.bin
 *.o
 *.iso
+*.d
+cenux.kernel
