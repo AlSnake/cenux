@@ -19,6 +19,7 @@ LIBS	:= $(LIBS)	 $(KERNEL_ARCH_LIBS)
 KERNEL_OBJS=\
 $(KERNEL_ARCH_OBJS) \
 kernel/kernel.o \
+kernel/tty.o \
 
 OBJS=\
 $(KERNEL_OBJS) \
@@ -57,5 +58,9 @@ clean:
 
 run:
 	qemu-system-i386 -hda cenux.kernel
+
+clangformat:
+	clang-format -i *.c */*.c */*/*.c
+	clang-format -i *.h */*.h */*/*.h
 
 -include $(OBJS:.o=.d)
