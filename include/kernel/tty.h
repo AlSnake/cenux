@@ -3,9 +3,10 @@
 
 #include <stdint.h>
 
+void terminal_initalize();
+void terminal_clear();
 void terminal_putchar(int x, int y, unsigned char c, uint8_t color);
 void terminal_writechar(unsigned char c, uint8_t color);
-void terminal_clear();
-void terminal_initalize();
+void terminal_writestring(const char* str);
 
 #endif

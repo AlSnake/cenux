@@ -3,16 +3,17 @@ CC = i686-elf-gcc
 LD = i686-elf-ld
 NASM = nasm
 
-CFLAGS  := $(CFLAGS) -g -ffreestanding -nostdlib -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -O0 -falign-jumps -falign-functions -falign-labels -fomit-frame-pointer -finline-functions -falign-loops -fstrength-reduce -Wno-unused-function -Wno-unused-parameter -fno-builtin -Wno-unused-label -Wno-cpp -Iinc
-LDFLAGS := $(LDFLAGS)
-LIBS 	:= $(LIBS)
-INCLUDES = -I./include
+CFLAGS  := -g -ffreestanding -nostdlib -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -O0 -falign-jumps -falign-functions -falign-labels -fomit-frame-pointer -finline-functions -falign-loops -fstrength-reduce -Wno-unused-function -Wno-unused-parameter -fno-builtin -Wno-unused-label -Wno-cpp -Iinc
+LDFLAGS :=
+LIBS 	:= -lk
+INCLUDES = -I./include -I./include/libc
 
-ARCHDIR=arch/$(HOSTARCH)
+ARCHDIR = arch/$(HOSTARCH)
+LIBDIR	= -L./libc
 
 include $(ARCHDIR)/make.config
 
-CFLAGS 	:= $(CFLAGS) $(KERNEL_ARCH_CFLAGS)
+CFLAGS 	:= $(CFLAGS) $(KERNEL_ARCH_CFLAGS) $(LIBDIR)
 LDFLAGS	:= $(LDFLAGS)$(KERNEL_ARCH_LDFLAGS)
 LIBS	:= $(LIBS)	 $(KERNEL_ARCH_LIBS)
 
@@ -29,15 +30,15 @@ $(LDFLAGS) \
 $(KERNEL_OBJS) \
 $(LIBS) \
 
-.PHONY: all clean
+.PHONY: all libc clean
 .SUFFIXES: .o .c .asm
 
-all: cenux.kernel
+all: libc cenux.kernel
 
 cenux.kernel: $(OBJS) $(ARCHDIR)/linker.ld
 	$(NASM) -f bin $(ARCHDIR)/boot.asm -o $(ARCHDIR)/boot.bin
 	$(LD) -g -relocatable $(OBJS) -o $(ARCHDIR)/kernelfull.o
-	$(CC) -T $(ARCHDIR)/linker.ld -o $(ARCHDIR)/kernel.bin $(CFLAGS) $(ARCHDIR)/kernelfull.o
+	$(CC) -T $(ARCHDIR)/linker.ld -o $(ARCHDIR)/kernel.bin $(CFLAGS) $(ARCHDIR)/kernelfull.o $(LIBS)
 
 	rm -rf cenux.kernel
 	dd if=$(ARCHDIR)/boot.bin >> cenux.kernel
@@ -50,11 +51,15 @@ cenux.kernel: $(OBJS) $(ARCHDIR)/linker.ld
 .asm.o:
 	$(NASM) -f elf -g $< -o $@
 
+libc:
+	make -C libc
+
 clean:
 	rm -f cenux.kernel
 	rm -f $(OBJS) *.o */*.o */*/*.o
 	rm -f $(OBJS:.o=.d) *.d */*.d */*/*.d
 	rm -f $(OBJS:.o=.bin) *.bin */*.bin */*/*.bin
+	make -C libc clean
 
 run:
 	qemu-system-i386 -hda cenux.kernel

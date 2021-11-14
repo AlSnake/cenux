@@ -8,6 +8,7 @@
 - [x] Boot
 - [x] Protected Mode
 - [x] Basic kernel
+- [x] Basic libC
 
 ### GDT & IDT
 - [ ] [GDT](https://wiki.osdev.org/GDT_Tutorial)

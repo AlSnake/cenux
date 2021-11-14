@@ -1,9 +1,26 @@
 #include <kernel/tty.h>
 #include <kernel/vga.h>
+#include <string.h>
+#include <stddef.h>
 
 uint16_t *video_mem;
 uint16_t terminal_row;
 uint16_t terminal_col;
+
+void terminal_initalize()
+{
+	video_mem = (uint16_t *)(0xB8000);
+	terminal_row = 0;
+	terminal_col = 0;
+	terminal_clear();
+}
+
+void terminal_clear()
+{
+	for (int y = 0; y < VGA_HEIGHT; y++)
+		for (int x = 0; x < VGA_WIDTH; x++)
+			terminal_putchar(x, y, ' ', VGA_COLOR_BLACK);
+}
 
 void terminal_putchar(int x, int y, unsigned char c, uint8_t color)
 {
@@ -27,17 +44,9 @@ void terminal_writechar(unsigned char c, uint8_t color)
 	}
 }
 
-void terminal_clear()
+void terminal_writestring(const char* str)
 {
-	for (int y = 0; y < VGA_HEIGHT; y++)
-		for (int x = 0; x < VGA_WIDTH; x++)
-			terminal_putchar(x, y, ' ', VGA_COLOR_BLACK);
-}
-
-void terminal_initalize()
-{
-	video_mem = (uint16_t *)(0xB8000);
-	terminal_row = 0;
-	terminal_col = 0;
-	terminal_clear();
+	size_t len = strlen(str);
+	for (size_t i = 0; i < len; i++)
+		terminal_writechar(str[i], VGA_COLOR_WHITE);
 }

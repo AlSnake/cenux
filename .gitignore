@@ -11,6 +11,7 @@ cenux.qt.*
 *.expand
 *.bin
 *.o
-*.iso
 *.d
+*.a
+*.iso
 cenux.kernel
