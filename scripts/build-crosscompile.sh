@@ -5,6 +5,7 @@ export PATH="$PREFIX/bin:$PATH"
 # BINUTILS
 wget https://ftp.gnu.org/gnu/binutils/binutils-2.37.tar.xz -P /tmp/osdevtoolchain
 tar xf /tmp/osdevtoolchain/binutils-2.37.tar.xz -C /tmp/osdevtoolchain
+mkdir $HOME/src
 cd $HOME/src
 mkdir build-binutils
 cd build-binutils
@@ -15,6 +16,7 @@ make install -j4
 # GCC
 wget https://ftp.gnu.org/gnu/gcc/gcc-11.2.0/gcc-11.2.0.tar.xz -P /tmp/osdevtoolchain
 tar xf /tmp/osdevtoolchain/gcc-11.2.0.tar.xz -C /tmp/osdevtoolchain
+mkdir $HOME/src
 cd $HOME/src
 # The $PREFIX/bin dir _must_ be in the PATH. We did that above.
 which -- $TARGET-as || echo $TARGET-as is not in the PATH

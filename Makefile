@@ -25,7 +25,7 @@ $(KERNEL_OBJS) \
 $(CPU_OBJS) \
 
 .PHONY: all libc clean
-.SUFFIXES: .o .c .asm
+.SUFFIXES: .o .c .asm.o .asm
 
 all: libc cenux.kernel
 
@@ -42,7 +42,7 @@ cenux.kernel: $(OBJS) $(BOOTDIR)/linker.ld
 .c.o:
 	$(CC) -MD -c $< -o $@ -std=gnu99 $(CFLAGS) $(INCLUDES)
 
-.asm.o:
+%.asm.o: %.asm
 	$(NASM) -f elf -g $< -o $@
 
 libc:
