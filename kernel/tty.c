@@ -7,7 +7,7 @@ uint16_t *video_mem;
 uint16_t terminal_row;
 uint16_t terminal_col;
 
-void terminal_initalize()
+void terminal_init()
 {
 	video_mem = (uint16_t *)(0xB8000);
 	terminal_row = 0;
@@ -44,7 +44,7 @@ void terminal_writechar(unsigned char c, uint8_t color)
 	}
 }
 
-void terminal_writestring(const char* str)
+void terminal_writestring(const char *str)
 {
 	size_t len = strlen(str);
 	for (size_t i = 0; i < len; i++)

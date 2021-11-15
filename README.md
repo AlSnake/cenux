@@ -1,6 +1,7 @@
 ## Cenux Operating System
-# Author: Enforcer
-# LICENSE: GPL-3
+- A 32-BIT OPERATING SYSTEM
+- Author: Enforcer
+- LICENSE: GPL-3
 
 ## PROCEDURES
 ### Loading kernel
@@ -11,9 +12,8 @@
 - [x] Basic libC
 
 ### GDT & IDT
-- [ ] [GDT](https://wiki.osdev.org/GDT_Tutorial)
-- [ ] [IDT](https://wiki.osdev.org/Interrupt_Descriptor_Table)
-- [ ] [The GDT and IDT](https://web.archive.org/web/20160326064709/http://jamesmolloy.co.uk/tutorial_html/4.-The%20GDT%20and%20IDT.html)
+- [x] GDT
+- [x] IDT
 
 ### Interrupt Requests (IRQs) and Programmable Interval Timer (PIT)
 - [ ] [IRQs and the PIT](https://web.archive.org/web/20160326061932/http://jamesmolloy.co.uk/tutorial_html/5.-IRQs%20and%20the%20PIT.html)
