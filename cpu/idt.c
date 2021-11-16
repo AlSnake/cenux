@@ -2,14 +2,10 @@
 #include <kernel/kernel.h>
 #include <kernel/printk.h>
 #include <string.h>
+#include <cpu/isr.h>
 
 struct idt_desc idt[CENUX_MAX_INTERRUPTS];
 struct idtr_desc idtr;
-
-void idt_zero()
-{
-	printk("DIVIDE BY ZERO ERROR\n");
-}
 
 void idt_init()
 {
@@ -18,8 +14,7 @@ void idt_init()
 	idtr.limit = sizeof(idt) - 1;
 	idtr.base = (uint32_t)idt;
 
-	// 0xEE = 0b11101110 => 4b TYPE AND 4b S DPL P
-	idt_set_gate(0, (uint32_t)idt_zero, KERNEL_CODE_SELECTOR, 0xEE);
+	isr_install();
 
 	idt_load(&idtr);
 }

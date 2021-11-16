@@ -18,7 +18,8 @@ struct idtr_desc {
 	uint32_t base; // base addr of start of idt
 } __attribute__((packed));
 
-
+extern void enable_interrupts();
+extern void disable_interrupts();
 extern void idt_load(struct idtr_desc* idtr);
 void idt_init();
 void idt_set_gate(int interrupt, uint32_t base, uint16_t selector, uint8_t type_attr);
