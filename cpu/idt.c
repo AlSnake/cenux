@@ -3,6 +3,7 @@
 #include <kernel/printk.h>
 #include <string.h>
 #include <cpu/isr.h>
+#include <cpu/irq.h>
 
 struct idt_desc idt[CENUX_MAX_INTERRUPTS];
 struct idtr_desc idtr;
@@ -15,6 +16,7 @@ void idt_init()
 	idtr.base = (uint32_t)idt;
 
 	isr_install();
+	irq_install();
 
 	idt_load(&idtr);
 }
