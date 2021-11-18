@@ -3,11 +3,13 @@
 #include <kernel/printk.h>
 #include <cpu/idt.h>
 #include <kernel/pic.h>
+#include <mm/kmem.h>
 
 void kmain()
 {
 	terminal_init();
 	pic_init();
+	kmem_init();
 	idt_init();
 	enable_interrupts();
 

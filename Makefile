@@ -12,10 +12,12 @@ LIBDIR	= -L./libc
 BOOTDIR   = ./boot
 KERNELDIR = ./kernel
 CPUDIR	  = ./cpu
+MMDIR	  = ./mm
 
 include $(BOOTDIR)/make.config
 include $(KERNELDIR)/make.config
 include $(CPUDIR)/make.config
+include $(MMDIR)/make.config
 
 CFLAGS 	:= $(CFLAGS) $(LIBDIR)
 
@@ -23,6 +25,7 @@ OBJS=\
 $(BOOT_OBJS) \
 $(KERNEL_OBJS) \
 $(CPU_OBJS) \
+$(MM_OBJS) \
 
 .PHONY: all libc clean
 .SUFFIXES: .o .c .asm.o .asm

@@ -16,12 +16,15 @@
 - [x] IDT
 
 ### Interrupt Requests (IRQs) and Programmable Interval Timer (PIT)
-- [ ] [IRQs and the PIT](https://web.archive.org/web/20160326061932/http://jamesmolloy.co.uk/tutorial_html/5.-IRQs%20and%20the%20PIT.html)
+- [x] IRQs
+- [ ] [PIT](https://web.archive.org/web/20160326061932/http://jamesmolloy.co.uk/tutorial_html/5.-IRQs%20and%20the%20PIT.html)
 
 #### Reading from Keyboard
 - [ ] [The keyboard](http://www.osdever.net/bkerndev/Docs/keyboard.htm)
 
 ### Paging
+- [x] Heap
+- [x] Memory Manager
 - [ ] [Setting up Paging](https://wiki.osdev.org/Setting_Up_Paging)
 - [ ] [Writing a Page Frame allocator](https://wiki.osdev.org/Writing_A_Page_Frame_Allocator)
 
