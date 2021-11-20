@@ -22,13 +22,13 @@
 #### Reading from Keyboard
 - [ ] [The keyboard](http://www.osdever.net/bkerndev/Docs/keyboard.htm)
 
-### Paging
+### Memory
 - [x] Heap
 - [x] Memory Manager
-- [ ] [Setting up Paging](https://wiki.osdev.org/Setting_Up_Paging)
+- [x] Paging
 - [ ] [Writing a Page Frame allocator](https://wiki.osdev.org/Writing_A_Page_Frame_Allocator)
 
-### Memory
+### Memory - NO CLUE
 - [ ] [Detecting Memory](https://wiki.osdev.org/Detecting_Memory_(x86))
 - [ ] [Creating a Memory map](https://wiki.osdev.org/Memory_Map_(x86))
 - [ ] [Writing a Memory Manager](https://wiki.osdev.org/Writing_a_memory_manager)
