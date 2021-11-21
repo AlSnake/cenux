@@ -5,12 +5,14 @@
 #include <kernel/pic.h>
 #include <mm/kmem.h>
 #include <mm/paging.h>
+#include <cpu/gdt.h>
 
 static struct page_directory *kernel_page;
 
 void kmain()
 {
 	terminal_init();
+	gdt_init();
 	pic_init();
 	kmem_init();
 	idt_init();

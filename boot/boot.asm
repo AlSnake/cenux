@@ -38,7 +38,7 @@ gdt_start:
 		db 0 ; 8-bits of base
 		db 10011010b ; 4-bit privilege + 4-bit type flags
 		db 11001111b ; 4-bit other flags + 4 bits of limit
-		db 0 ; 9 bits of base
+		db 0 ; 8 bits of base
 
 	; offset 0x10
 	gdt_data:
