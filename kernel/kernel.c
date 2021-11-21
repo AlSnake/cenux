@@ -1,6 +1,6 @@
 #include <kernel/kernel.h>
 #include <kernel/tty.h>
-#include <kernel/printk.h>
+#include <kernel/kprintf.h>
 #include <cpu/idt.h>
 #include <kernel/pic.h>
 #include <mm/kmem.h>
@@ -22,5 +22,5 @@ void kmain()
 	enable_paging();
 	enable_interrupts();
 
-	printk("CENUX OPERATING SYSTEM\nBY ENFORCER INC\n");
+	kprintf("CENUX OPERATING SYSTEM\nBY ENFORCER INC\n");
 }

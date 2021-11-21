@@ -1,7 +1,7 @@
 #include <cpu/isr.h>
 #include <cpu/idt.h>
 #include <kernel/kernel.h>
-#include <kernel/printk.h>
+#include <kernel/panic.h>
 
 /* ISRs reserved for CPU exceptions */
 extern void _isr0();
@@ -111,7 +111,5 @@ void isr_install()
 void _fault_handler(struct interrupt_frame frame)
 {
 	if (frame.int_no < 32)
-		printk(exception_messages[frame.int_no]);
-	for (;;)
-		;
+		panic(exception_messages[frame.int_no]);
 }

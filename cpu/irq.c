@@ -4,7 +4,6 @@
 #include <cpu/interrupt.h>
 #include <kernel/pic.h>
 #include <cpu/ports.h>
-#include <kernel/printk.h>
 
 /* IRQ FUNCTIONS */
 extern void _irq0();
