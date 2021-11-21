@@ -20,6 +20,6 @@ struct gdtr_desc {
 }__attribute__((packed));
 
 void gdt_init();
-void gdt_set_gate(int seg, uint32_t base, uint32_t limit, uint8_t access, uint8_t granularity);
+void gdt_set_gate(uint32_t seg, uint32_t base, uint32_t limit, uint8_t access, uint8_t granularity);
 
 #endif

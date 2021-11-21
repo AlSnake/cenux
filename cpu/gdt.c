@@ -1,5 +1,7 @@
 #include <cpu/gdt.h>
 #include <cenux/string.h>
+#include <cpu/tss.h>
+#include <kernel/kernel.h>
 
 struct gdt_desc gdt[GDT_TOTAL_SEGMENTS];
 struct gdtr_desc gdtr;
@@ -15,7 +17,7 @@ void gdt_init()
 
 	gdt_set_gate(0, 0, 0, 0, 0); // NULL DESCRIPTOR
 
-	/* Code and Data Descriptor
+	/* KERNEL Code and Data Descriptor
 	* Base Address 0
 	* Limit is 4gb
 	* 4kb gran
@@ -26,10 +28,25 @@ void gdt_init()
 	gdt_set_gate(1, 0, 0xffffffff, 0x9a, 0xcf); // Kernel Code Segment
 	gdt_set_gate(2, 0, 0xffffffff, 0x92, 0xcf); // Kernel Data Segment
 
+	/* USER Code and Data Descriptor
+	* Base Address 0
+	* Limit is 4gb
+	* 4kb gran
+	* 32bit opcodes
+	* Selector 0x18 will be our code segment offset
+	* Selector 0x20 will be our data segment offset
+	*/
+	gdt_set_gate(3, 0, 0xffffffff, 0xf8, 0xcf); // User Code Segment
+	gdt_set_gate(4, 0, 0xffffffff, 0xf2, 0xcf); // User Data Segment
+
+	/* SET TSS */
+	tss_set_gate(5, 0x600000, KERNEL_DATA_SELECTOR);
+
 	gdt_load(&gdtr);
+	tss_load(TSS_SELECTOR);
 }
 
-void gdt_set_gate(int seg, uint32_t base, uint32_t limit, uint8_t access,
+void gdt_set_gate(uint32_t seg, uint32_t base, uint32_t limit, uint8_t access,
 		  uint8_t granularity)
 {
 	/* Setup Base */
