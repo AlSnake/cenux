@@ -8,6 +8,15 @@ size_t strlen(const char *s)
 	return len;
 }
 
+void strrev(char *s, uint32_t len)
+{
+	for (uint32_t i = 0; i < len / 2; i++) {
+		char tmp = s[i];
+		s[i] = s[len - 1 - i];
+		s[len - 1 - i] = tmp;
+	}
+}
+
 void *memset(void *s, int c, size_t n)
 {
 	unsigned char *buf = (unsigned char *)s;
