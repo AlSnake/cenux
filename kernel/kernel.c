@@ -6,6 +6,7 @@
 #include <mm/kmem.h>
 #include <mm/paging.h>
 #include <cpu/gdt.h>
+#include <drivers/ata.h>
 
 static struct page_directory *kernel_page;
 
@@ -16,6 +17,7 @@ void kmain()
 	pic_init();
 	kmem_init();
 	idt_init();
+	ata_init();
 
 	kernel_page = paging_alloc(PAGING_IS_PRESENT | PAGING_IS_WRITEABLE |
 				   PAGING_ACCESS_FROM_ALL);
@@ -24,5 +26,5 @@ void kmain()
 	enable_paging();
 	enable_interrupts();
 
-	kprintf("CENUX OPERATING SYSTEM\nBY ENFORCER INC\n");
+	kprintf("\nCENUX OPERATING SYSTEM\n");
 }

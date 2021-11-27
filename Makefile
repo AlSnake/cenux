@@ -13,11 +13,13 @@ BOOTDIR   = ./boot
 KERNELDIR = ./kernel
 CPUDIR	  = ./cpu
 MMDIR	  = ./mm
+DRIVERSDIR= ./drivers
 
 include $(BOOTDIR)/make.config
 include $(KERNELDIR)/make.config
 include $(CPUDIR)/make.config
 include $(MMDIR)/make.config
+include $(DRIVERSDIR)/make.config
 
 CFLAGS 	:= $(CFLAGS) $(LIBDIR)
 
@@ -26,6 +28,7 @@ $(BOOT_OBJS) \
 $(KERNEL_OBJS) \
 $(CPU_OBJS) \
 $(MM_OBJS) \
+$(DRIVERS_OBJS) \
 
 .PHONY: all libc clean
 .SUFFIXES: .o .c .asm.o .asm
