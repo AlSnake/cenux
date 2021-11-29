@@ -35,3 +35,8 @@ int32_t itoa(int32_t n, char *buf, uint32_t len, uint32_t base)
 
 	return 0;
 }
+
+int32_t ctoi(char c)
+{
+	return c - 48;
+}
