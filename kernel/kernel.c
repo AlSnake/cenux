@@ -7,6 +7,7 @@
 #include <mm/paging.h>
 #include <cpu/gdt.h>
 #include <drivers/ata.h>
+#include <drivers/device.h>
 
 static struct page_directory *kernel_page;
 
@@ -17,6 +18,7 @@ void kmain()
 	pic_init();
 	kmem_init();
 	idt_init();
+	device_init();
 	ata_init();
 
 	kernel_page = paging_alloc(PAGING_IS_PRESENT | PAGING_IS_WRITEABLE |
@@ -26,5 +28,5 @@ void kmain()
 	enable_paging();
 	enable_interrupts();
 
-	kprintf("\nCENUX OPERATING SYSTEM\n");
+	_device_print();
 }

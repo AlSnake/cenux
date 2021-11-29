@@ -2,6 +2,7 @@
 #define _DRIVERS_ATA_H_
 
 #include <stdint.h>
+#include <drivers/device.h>
 
 /* DATA PORTS */
 #define ATA_PRIMARY_IO 		0x1F0
@@ -67,8 +68,8 @@ struct ata_device {
 	uint8_t drive;
 };
 
-void ata_read(struct ata_device* dev, uint32_t lba, void* buf, uint32_t sector);
-void ata_write(struct ata_device* dev, uint32_t lba, void* buf, uint32_t sector);
+int32_t ata_read(struct device* dev, uint32_t lba, void* buf, uint32_t sector);
+int32_t ata_write(struct device* dev, uint32_t lba, void* buf, uint32_t sector);
 void ata_init();
 
 #endif

@@ -3,6 +3,7 @@
 #include <kernel/kprintf.h>
 #include <kernel/panic.h>
 #include <mm/kmem.h>
+#include <drivers/device.h>
 
 static void ide_select_drive(uint8_t bus, uint8_t drive)
 {
@@ -87,9 +88,8 @@ retry:
 }
 
 /* 28bit LBA MODE */
-static int8_t ata_read_sector(struct ata_device *dev, uint32_t lba, void *buf)
+static int8_t ata_read_sector(uint8_t drive, uint32_t lba, void *buf)
 {
-	uint8_t drive = dev->drive;
 	uint16_t port = 0;
 
 	switch (drive) {
@@ -110,7 +110,7 @@ static int8_t ata_read_sector(struct ata_device *dev, uint32_t lba, void *buf)
 		drive = ATA_SLAVE;
 		break;
 	default:
-		kprintf("UNKNOWN DRIVE: %d\n", dev->drive);
+		kprintf("UNKNOWN DRIVE: %d\n", drive);
 		return -1;
 	}
 
@@ -140,9 +140,8 @@ static int8_t ata_read_sector(struct ata_device *dev, uint32_t lba, void *buf)
 }
 
 /* 28bit LBA MODE */
-static int8_t ata_write_sector(struct ata_device *dev, uint32_t lba, void *buf)
+static int8_t ata_write_sector(uint8_t drive, uint32_t lba, void *buf)
 {
-	uint8_t drive = dev->drive;
 	uint16_t port = 0;
 
 	switch (drive) {
@@ -163,7 +162,7 @@ static int8_t ata_write_sector(struct ata_device *dev, uint32_t lba, void *buf)
 		drive = ATA_SLAVE;
 		break;
 	default:
-		kprintf("UNKNOWN DRIVE: %d\n", dev->drive);
+		kprintf("UNKNOWN DRIVE: %d\n", drive);
 		return -1;
 	}
 
@@ -207,46 +206,54 @@ static int32_t validate_drive(uint8_t drive)
 	return -1;
 }
 
-void ata_read(struct ata_device *dev, uint32_t lba, void *buf, uint32_t sector)
+int32_t ata_read(struct device *dev, uint32_t lba, void *buf, uint32_t sector)
 {
-	if (validate_drive(dev->drive) == -1) {
-		kprintf("UNKNOWN DRIVE: %d\n", dev->drive);
-		return;
+	uint8_t drive = ((struct ata_device *)dev->priv)->drive;
+
+	if (validate_drive(drive) == -1) {
+		kprintf("UNKNOWN DRIVE: %d\n", drive);
+		return -1;
 	}
 
 	uint8_t *ptr = buf;
 	for (uint32_t i = 0; i < sector; i++) {
-		ata_read_sector(dev, lba, ptr);
+		ata_read_sector(drive, lba, ptr);
 		ptr += 512;
 	}
+
+	return 0;
 }
 
-void ata_write(struct ata_device *dev, uint32_t lba, void *buf, uint32_t sector)
+int32_t ata_write(struct device *dev, uint32_t lba, void *buf, uint32_t sector)
 {
-	if (validate_drive(dev->drive) == -1) {
-		kprintf("UNKNOWN DRIVE: %d\n", dev->drive);
-		return;
+	uint8_t drive = ((struct ata_device *)dev->priv)->drive;
+
+	if (validate_drive(drive) == -1) {
+		kprintf("UNKNOWN DRIVE: %d\n", drive);
+		return -1;
 	}
 
 	uint8_t *ptr = buf;
 	for (uint32_t i = 0; i < sector; i++) {
-		ata_write_sector(dev, lba, ptr);
+		ata_write_sector(drive, lba, ptr);
 		ptr += 512;
 	}
+
+	return 0;
 }
 
 void ata_init()
 {
 	kprintf("SCANNING ATA DEVICES\n");
 
-	uint8_t *data = kmalloc(512);
+	uint8_t *data = kzalloc(512);
 	if (!data)
 		panic("NOMEM");
 
 	// PRIMARY BUS -> MASTER DRIVE
 	if (ide_identify(ATA_PRIMARY_CHANNEL, ATA_MASTER, data) != -1) {
 		// Extract Model
-		char *model = kmalloc(40);
+		char *model = kzalloc(40);
 		if (!model)
 			panic("NOMEM");
 
@@ -255,6 +262,23 @@ void ata_init()
 			model[i + 1] = data[ATA_IDENT_MODEL + i];
 		}
 
-		kprintf("DETECTED DEVICE: %s\n", model);
+		struct ata_device *ata_dev = kzalloc(sizeof(struct ata_device));
+		if (!ata_dev)
+			panic("NOMEM");
+
+		ata_dev->drive = PRIMARY_MASTER_DRIVE;
+
+		struct device *dev = kzalloc(sizeof(struct device));
+		if (!dev)
+			panic("NOMEM");
+
+		dev->name = model;
+		dev->uid = device_generate_uid();
+		dev->type = BLOCK_DEVICE;
+		dev->priv = ata_dev;
+		dev->read = ata_read;
+		dev->write = ata_write;
+
+		device_add(dev);
 	}
 }
