@@ -34,6 +34,11 @@ int32_t kprintf(const char *fmt, ...)
 			terminal_writestring(tmp);
 			break;
 		}
+		case 'c': {
+			char ch = va_arg(ap, int);
+			terminal_writechar(ch, VGA_COLOR_WHITE);
+			break;
+		}
 		case 's':
 			c = va_arg(ap, char *);
 			terminal_writestring(c);

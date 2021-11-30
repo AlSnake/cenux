@@ -9,6 +9,7 @@
 #include <drivers/ata.h>
 #include <drivers/device.h>
 #include <kernel/pit.h>
+#include <drivers/keyboard.h>
 
 static struct page_directory *kernel_page;
 
@@ -19,9 +20,10 @@ void kmain()
 	pic_init();
 	kmem_init();
 	idt_init();
-	pit_init(100); // 100ms
+	// pit_init(100); // 100ms
 	device_init();
 	ata_init();
+	keyboard_init();
 
 	kernel_page = paging_alloc(PAGING_IS_PRESENT | PAGING_IS_WRITEABLE |
 				   PAGING_ACCESS_FROM_ALL);
@@ -30,5 +32,5 @@ void kmain()
 	enable_paging();
 	enable_interrupts();
 
-	_device_print();
+	// _device_print();
 }
