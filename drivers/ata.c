@@ -5,6 +5,8 @@
 #include <mm/kmem.h>
 #include <drivers/device.h>
 
+#define SECTOR_SIZE 512
+
 static void ide_select_drive(uint8_t bus, uint8_t drive)
 {
 	if (bus == ATA_PRIMARY_CHANNEL)
@@ -218,10 +220,10 @@ int32_t ata_read(struct device *dev, uint32_t lba, void *buf, uint32_t sector)
 	uint8_t *ptr = buf;
 	for (uint32_t i = 0; i < sector; i++) {
 		ata_read_sector(drive, lba, ptr);
-		ptr += 512;
+		ptr += SECTOR_SIZE;
 	}
 
-	return 0;
+	return sector * SECTOR_SIZE;
 }
 
 int32_t ata_write(struct device *dev, uint32_t lba, void *buf, uint32_t sector)
@@ -236,17 +238,17 @@ int32_t ata_write(struct device *dev, uint32_t lba, void *buf, uint32_t sector)
 	uint8_t *ptr = buf;
 	for (uint32_t i = 0; i < sector; i++) {
 		ata_write_sector(drive, lba, ptr);
-		ptr += 512;
+		ptr += SECTOR_SIZE;
 	}
 
-	return 0;
+	return sector * SECTOR_SIZE;
 }
 
 void ata_init()
 {
 	kprintf("SCANNING ATA DEVICES\n");
 
-	uint8_t *data = kzalloc(512);
+	uint8_t *data = kzalloc(SECTOR_SIZE);
 	if (!data)
 		panic("NOMEM");
 
