@@ -8,6 +8,7 @@
 #include <cpu/gdt.h>
 #include <drivers/ata.h>
 #include <drivers/device.h>
+#include <kernel/pit.h>
 
 static struct page_directory *kernel_page;
 
@@ -18,6 +19,7 @@ void kmain()
 	pic_init();
 	kmem_init();
 	idt_init();
+	pit_init(100); // 100ms
 	device_init();
 	ata_init();
 

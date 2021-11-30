@@ -2,6 +2,7 @@
 #include <cpu/idt.h>
 #include <kernel/kernel.h>
 #include <kernel/panic.h>
+#include <cpu/interrupt.h>
 
 /* ISRs reserved for CPU exceptions */
 extern void _isr0();
