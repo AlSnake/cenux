@@ -109,8 +109,8 @@ void isr_install()
 	idt_set_gate(31, (uint32_t)_isr31, KERNEL_CODE_SELECTOR, 0x8E);
 }
 
-void _fault_handler(struct interrupt_frame frame)
+void _fault_handler(struct interrupt_frame *frame)
 {
-	if (frame.int_no < 32)
-		panic(exception_messages[frame.int_no]);
+	if (frame->int_no < 32)
+		panic(exception_messages[frame->int_no]);
 }

@@ -56,23 +56,23 @@ void irq_uninstall_handler(uint32_t irq)
 	irq_routines[irq] = 0;
 }
 
-void _irq_handler(struct interrupt_frame frame)
+void _irq_handler(struct interrupt_frame *frame)
 {
 	void (*handler)(struct interrupt_frame * frame);
 
 	/* Handler CUSTOM IRQs */
-	handler = irq_routines[frame.int_no - 32];
-	if (handler && frame.int_no - 32 != 0)
-		handler(&frame);
+	handler = irq_routines[frame->int_no - 32];
+	if (handler && frame->int_no - 32 != 0)
+		handler(frame);
 
 	/* INT >= 40 (meaning IRQ8 - 15), then we need to send an EOI to the slave controller */
-	if (frame.int_no >= 40)
+	if (frame->int_no >= 40)
 		outb(PIC2_COMMAND, PIC_EOI);
 
 	/* In either case, send EOI to Master Interrupt Controller */
 	outb(PIC1_COMMAND, PIC_EOI);
 
 	/* TIMER IRQ- PERFORM TASK SWITCH AFTER SENDING EOI TO INTERRUPT CONTROLLER */
-	if (handler && frame.int_no - 32 == 0)
-		handler(&frame);
+	if (handler && frame->int_no - 32 == 0)
+		handler(frame);
 }
