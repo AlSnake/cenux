@@ -1,7 +1,16 @@
 #include <kernel/kprintf.h>
-#include <kernel/tty.h>
-#include <kernel/vga.h>
+#include <drivers/vga.h>
 #include <cenux/stdlib.h>
+
+static void kprint(const char *str)
+{
+	vga_print(str);
+}
+
+static void kputc(char c)
+{
+	vga_putchar(c);
+}
 
 int32_t kprintf(const char *fmt, ...)
 {
@@ -13,7 +22,7 @@ int32_t kprintf(const char *fmt, ...)
 	va_start(ap, fmt);
 	for (ptr = fmt; *ptr; ptr++) {
 		if (*ptr != '%') {
-			terminal_writechar(*ptr, VGA_COLOR_WHITE);
+			kputc(*ptr);
 			continue;
 		}
 
@@ -24,27 +33,27 @@ int32_t kprintf(const char *fmt, ...)
 			val = va_arg(ap, int);
 			char tmp[12];
 			itoa(val, tmp, sizeof(tmp), 10);
-			terminal_writestring(tmp);
+			kprint(tmp);
 			break;
 		}
 		case 'x': {
 			val = va_arg(ap, int);
 			char tmp[12];
 			itoa(val, tmp, sizeof(tmp), 16);
-			terminal_writestring(tmp);
+			kprint(tmp);
 			break;
 		}
 		case 'c': {
 			char ch = va_arg(ap, int);
-			terminal_writechar(ch, VGA_COLOR_WHITE);
+			kputc(ch);
 			break;
 		}
 		case 's':
 			c = va_arg(ap, char *);
-			terminal_writestring(c);
+			kprint(c);
 			break;
 		default:
-			terminal_writechar(*ptr, VGA_COLOR_WHITE);
+			kputc(*ptr);
 			break;
 		}
 	}

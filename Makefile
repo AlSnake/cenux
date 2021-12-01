@@ -4,10 +4,10 @@ NASM = nasm
 
 CFLAGS  := -g -ffreestanding -nostdlib -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -O0 -falign-jumps -falign-functions -falign-labels -fomit-frame-pointer -finline-functions -falign-loops -fstrength-reduce -Wno-unused-function -Wno-unused-parameter -fno-builtin -Wno-unused-label -Wno-cpp -Iinc
 LDFLAGS :=
-LIBS 	:= -lk
-INCLUDES = -I./include -I./include/libc
+LIBS 	:= 
+INCLUDES = -I./include
 
-LIBDIR	= -L./libc
+LIBDIR	= 
 
 BOOTDIR   = ./boot
 KERNELDIR = ./kernel
@@ -33,20 +33,20 @@ $(MM_OBJS) \
 $(DRIVERS_OBJS) \
 $(FS_OBJS) \
 
-.PHONY: all libc clean
+.PHONY: all clean
 .SUFFIXES: .o .c .asm.o .asm
 
-all: libc cenux.kernel
+all: cenux.bin
 
-cenux.kernel: $(OBJS) $(BOOTDIR)/linker.ld
+cenux.bin: $(OBJS) $(BOOTDIR)/linker.ld
 	$(NASM) -f bin $(BOOTDIR)/boot.asm -o $(BOOTDIR)/boot.bin
 	$(LD) -g -relocatable $(OBJS) -o $(BOOTDIR)/kernelfull.o
 	$(CC) -T $(BOOTDIR)/linker.ld -o $(BOOTDIR)/kernel.bin $(CFLAGS) $(BOOTDIR)/kernelfull.o $(LIBS)
 
-	rm -rf cenux.kernel
-	dd if=$(BOOTDIR)/boot.bin >> cenux.kernel
-	dd if=$(BOOTDIR)/kernel.bin >> cenux.kernel
-	dd if=/dev/zero bs=512 count=100 >> cenux.kernel
+	rm -rf cenux.bin
+	dd if=$(BOOTDIR)/boot.bin >> cenux.bin
+	dd if=$(BOOTDIR)/kernel.bin >> cenux.bin
+	dd if=/dev/zero bs=512 count=100 >> cenux.bin
 
 .c.o:
 	$(CC) -MD -c $< -o $@ -std=gnu99 $(CFLAGS) $(INCLUDES)
@@ -54,21 +54,16 @@ cenux.kernel: $(OBJS) $(BOOTDIR)/linker.ld
 %.asm.o: %.asm
 	$(NASM) -f elf -g $< -o $@
 
-libc:
-	make -C libc
-
 clean:
-	rm -f cenux.kernel
+	rm -f cenux.bin
 	rm -f $(OBJS) *.o */*.o */*/*.o
 	rm -f $(OBJS:.o=.d) *.d */*.d */*/*.d
 	rm -f $(OBJS:.o=.bin) *.bin */*.bin */*/*.bin
-	make -C libc clean
 
 run:
-	qemu-system-i386 -hda cenux.kernel
+	qemu-system-i386 -hda cenux.bin
 
 clangformat:
 	clang-format -i *.c */*.c */*/*.c
-	clang-format -i *.h */*.h */*/*.h
 
 -include $(OBJS:.o=.d)

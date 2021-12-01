@@ -1,6 +1,6 @@
 #include <cpu/idt.h>
 #include <kernel/kernel.h>
-#include <string.h>
+#include <cenux/string.h>
 #include <cpu/isr.h>
 #include <cpu/irq.h>
 

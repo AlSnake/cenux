@@ -13,10 +13,13 @@ size_t strcspn(const char *s1, const char *s2);
 char* strtok(char *s, const char *delim);
 char* strtok_r(char *s, const char *delim, char **saveptr);
 char* strncpy(char *s1, const char *s2, size_t n);
+int32_t strncmp(const char *s1, const char *s2, size_t n);
 char* strdup(const char *s);
 char* strndup(const char *s, size_t n);
 
 void* memset(void* s, int32_t c, size_t n);
+void* memsetw(uint16_t* s, uint16_t c, size_t n);
 int32_t memcmp(const void *s1, const void *s2, size_t n);
+void* memcpy(void *dest, const void * src, size_t n);
 
 #endif

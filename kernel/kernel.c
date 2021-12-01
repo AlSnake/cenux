@@ -1,5 +1,5 @@
 #include <kernel/kernel.h>
-#include <kernel/tty.h>
+#include <drivers/vga.h>
 #include <kernel/kprintf.h>
 #include <cpu/idt.h>
 #include <kernel/pic.h>
@@ -11,11 +11,11 @@
 #include <kernel/pit.h>
 #include <drivers/keyboard.h>
 
-static struct page_directory *kernel_page;
+static struct page_directory *kernel_page = 0;
 
 void kmain()
 {
-	terminal_init();
+	vga_init();
 	gdt_init();
 	pic_init();
 	kmem_init();
@@ -23,7 +23,7 @@ void kmain()
 	// pit_init(100); // 100ms
 	device_init();
 	ata_init();
-	keyboard_init();
+	// keyboard_init();
 
 	kernel_page = paging_alloc(PAGING_IS_PRESENT | PAGING_IS_WRITEABLE |
 				   PAGING_ACCESS_FROM_ALL);

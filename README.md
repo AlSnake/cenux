@@ -1,6 +1,6 @@
 ## Cenux Operating System
 - A 32-BIT OPERATING SYSTEM
-- Author: Enforcer
+- Author: Al Snake
 - LICENSE: GPL-3
 
 ## PROCEDURES
@@ -17,10 +17,13 @@
 
 ### Interrupt Requests (IRQs) and Programmable Interval Timer (PIT)
 - [x] IRQs
-- [ ] [PIT](https://web.archive.org/web/20160326061932/http://jamesmolloy.co.uk/tutorial_html/5.-IRQs%20and%20the%20PIT.html)
+- [x] PIT
 
-#### Reading from Keyboard
-- [ ] [The keyboard](http://www.osdever.net/bkerndev/Docs/keyboard.htm)
+#### Drivers
+- [x] ATA - SIMPLE
+- [x] VGA - SIMPLE
+- [x] keyboard - SIMPLE
+- [ ] Mouse
 
 ### Memory
 - [x] Heap
