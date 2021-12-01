@@ -17,6 +17,8 @@ char* strdup(const char *s);
 char* strndup(const char *s, size_t n);
 
 void* memset(void* s, int32_t c, size_t n);
+void* memsetw(uint16_t* s, uint16_t c, size_t n);
 int32_t memcmp(const void *s1, const void *s2, size_t n);
+void* memcpy(void *dest, const void * src, size_t n);
 
 #endif

@@ -137,6 +137,14 @@ void *memset(void *s, int32_t c, size_t n)
 	return s;
 }
 
+void *memsetw(uint16_t *s, uint16_t c, size_t n)
+{
+	uint16_t *buf = (uint16_t *)s;
+	for (size_t i = 0; i < n; i++)
+		buf[i] = (uint16_t)c;
+	return s;
+}
+
 int32_t memcmp(const void *s1, const void *s2, size_t n)
 {
 	const unsigned char *p1 = s1;
@@ -149,4 +157,14 @@ int32_t memcmp(const void *s1, const void *s2, size_t n)
 			return 1;
 	}
 	return 0;
+}
+
+void *memcpy(void *dest, const void *src, size_t n)
+{
+	uint8_t *p1 = dest;
+	const uint8_t *p2 = src;
+
+	while (n--)
+		*p1++ = *p2++;
+	return dest;
 }
