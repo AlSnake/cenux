@@ -2,6 +2,7 @@
 #define _DRIVERS_DEVICE_H_
 
 #include <stdint.h>
+#include <drivers/devs.h>
 
 typedef enum device_type{
 	CHAR_DEVICE = 1,
