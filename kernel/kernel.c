@@ -10,6 +10,7 @@
 #include <drivers/device.h>
 #include <kernel/pit.h>
 #include <drivers/keyboard.h>
+#include <fs/vfs.h>
 
 static struct page_directory *kernel_page = 0;
 
@@ -23,6 +24,7 @@ void kmain()
 	// pit_init(100); // 100ms
 	device_init();
 	ata_init();
+	vfs_init();
 	// keyboard_init();
 
 	kernel_page = paging_alloc(PAGING_IS_PRESENT | PAGING_IS_WRITEABLE |

@@ -61,9 +61,14 @@ clean:
 	rm -f $(OBJS:.o=.bin) *.bin */*.bin */*/*.bin
 
 run:
-	qemu-system-i386 -hda cenux.bin
+	qemu-system-i386 -hda cenux.bin -hdb hdd.img
 
 clangformat:
 	clang-format -i *.c */*.c */*/*.c
+
+hdd:
+	dd if=/dev/zero of=hdd.img bs=1M count=2
+	mkfs.ext2 hdd.img
+
 
 -include $(OBJS:.o=.d)

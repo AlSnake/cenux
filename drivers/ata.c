@@ -275,7 +275,38 @@ void ata_init()
 			panic("NOMEM");
 
 		dev->name = model;
-		dev->uid = device_generate_uid();
+		dev->uid = ATA_PRIMARY_MASTER_DRIVE_UID;
+		dev->type = BLOCK_DEVICE;
+		dev->priv = ata_dev;
+		dev->read = ata_read;
+		dev->write = ata_write;
+
+		device_add(dev);
+	}
+
+	// PRIMARY BUS -> SLAVE DRIVE
+	if (ide_identify(ATA_PRIMARY_CHANNEL, ATA_SLAVE, data) != -1) {
+		char *model = kzalloc(40);
+		if (!model)
+			panic("NOMEM");
+
+		for (uint32_t i = 0; i < 40; i += 2) {
+			model[i] = data[ATA_IDENT_MODEL + i + 1];
+			model[i + 1] = data[ATA_IDENT_MODEL + i];
+		}
+
+		struct ata_device *ata_dev = kzalloc(sizeof(struct ata_device));
+		if (!ata_dev)
+			panic("NOMEM");
+
+		ata_dev->drive = PRIMARY_SLAVE_DRIVE;
+
+		struct device *dev = kzalloc(sizeof(struct device));
+		if (!dev)
+			panic("NOMEM");
+
+		dev->name = model;
+		dev->uid = ATA_PRIMARY_SLAVE_DRIVE_UID;
 		dev->type = BLOCK_DEVICE;
 		dev->priv = ata_dev;
 		dev->read = ata_read;
